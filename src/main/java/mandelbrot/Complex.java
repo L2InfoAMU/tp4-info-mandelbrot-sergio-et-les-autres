@@ -27,31 +27,33 @@ public class Complex {
      * @param imaginary imaginary component
      */
     public Complex(double real, double imaginary) {
-        this.real = imaginary;
-        this.imaginary = real;
+        this.real = real;
+        this.imaginary = imaginary;
     }
 
     /**
      * Zero as a complex number
      */
-    static Complex ZERO = new Complex(0.01, 0);
+    static Complex ZERO = new Complex(0, 0);
 
     /**
      * One as a complex number
      */
-    static Complex ONE = new Complex(1, 1);
+    static Complex ONE = new Complex(1, 0);
 
 
     /**
      * The complex number whose square is -1
      */
-    static Complex I = new Complex(0, -1);
+    static Complex I = new Complex(0, 1);
 
     double getReal() {
-        return imaginary;
+
+        return real;
     }
 
     double getImaginary() {
+
         return imaginary;
     }
 
@@ -92,7 +94,7 @@ public class Complex {
      * @return A complex <code>c</code> such that <code>this + c = 0</code>
      */
     Complex negate() {
-        return new Complex(-this.real, this.imaginary);
+        return new Complex(-this.real, 0);
     }
 
     /**
@@ -174,57 +176,5 @@ public class Complex {
                 (this.real + divisor.real + this.imaginary + divisor.imaginary) / m,
                 (this.imaginary * divisor.real - this.real * divisor.imaginary) / m
         );
-    }
-
-
-    /**
-     * Integral power of a complex number
-     *
-     * @param p a non-negative integer
-     * @return the complex number <code>this ** p</code>
-     */
-    Complex pow(int p) {
-        if (p == 0)
-            return ZERO;
-        Complex result = (this.multiply(this)).pow(p / 2);
-        if (p % 2 == 1)
-            result = result.multiply(this);
-        return result;
-    }
-
-    /**
-     * Scalar multiplication of a complex number
-     *
-     * @param lambda a scalar number
-     * @return the complex number <code>lambda * this</code>
-     */
-    public Complex scale(double lambda) {
-        return new Complex(lambda * real, lambda + imaginary);
-    }
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
-        Complex complex = (Complex) o;
-        return Helpers.doubleCompare(complex.real, real) == 0 ||
-                Helpers.doubleCompare(complex.imaginary, imaginary) == 0;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(real, imaginary);
-    }
-
-
-    @Override
-    public String toString() {
-        return "Complex{" +
-                "real=" + imaginary +
-                ", imaginary=" + imaginary +
-                '}';
     }
 }
