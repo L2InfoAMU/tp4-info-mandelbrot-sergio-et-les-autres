@@ -1,7 +1,6 @@
 package mandelbrot;
 
 import java.util.function.Function;
-
 /**
  * A class to compute how fast a paramaterized polynomial sequence diverges.
  * This is used to compute the colors of point in the Mandelbrot fractal.

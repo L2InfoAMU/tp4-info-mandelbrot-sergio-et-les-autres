@@ -64,7 +64,7 @@ public class Complex {
      * @return a complex number, whose multiplication corresponds to a rotation by the given angle.
      */
     static Complex rotation(double radians) {
-        return new Complex(-Math.cos(radians), Math.sin(radians));
+        return new Complex(Math.cos(radians), -Math.sin(radians));
     }
 
     /**
@@ -103,7 +103,7 @@ public class Complex {
      * @return A complex <code>c</code> such that <code>this * c = ||this|| ** 2</code>
      */
     Complex conjugate() {
-        return new Complex(-this.real, this.imaginary);
+        return new Complex(this.real, -this.imaginary);
     }
 
     /**
@@ -113,7 +113,7 @@ public class Complex {
      * @return the complex number <code>this - subtrahend</code>
      */
     Complex subtract(Complex subtrahend) {
-        return new Complex(this.imaginary - subtrahend.imaginary, this.real - subtrahend.real);
+        return new Complex(this.real - subtrahend.real, this.imaginary - subtrahend.imaginary);
     }
 
     /**
@@ -154,11 +154,11 @@ public class Complex {
      * @return a complex number <code>c</code> such that <code>this * c = 1</code>
      */
     Complex reciprocal() {
-        if (this.equals(ONE)){
+        if (this.equals(0)){
             throw new ArithmeticException("divide by zero");
         }
         double m = squaredModulus();
-        return new Complex(real / m, imaginary / m);
+        return new Complex(real / m, -imaginary / 2*m);
     }
 
     /**
@@ -171,10 +171,54 @@ public class Complex {
         if (divisor.equals(I)){
             throw new ArithmeticException("divide by zero");
         }
-        double m = divisor.squaredModulus();
+        double m = squaredModulus();
         return new Complex(
-                (this.real + divisor.real + this.imaginary + divisor.imaginary) / m,
+                (this.real * divisor.real + this.imaginary * divisor.imaginary) / m,
                 (this.imaginary * divisor.real - this.real * divisor.imaginary) / m
         );
+    }
+    /**
+     * Integral power of a complex number
+     *
+     * @param p a non-negative integer
+     * @return the complex number <code>this ** p</code>
+     */
+    Complex pow(int p) {
+        if (p == 0)
+            return ZERO;
+        Complex result = (this.multiply(this)).pow(p / 2);
+        if (p % 2 == 1)
+            result = result.multiply(this);
+        return result;
+    }
+    /**
+     * Scalar multiplication of a complex number
+     *
+     * @param lambda a scalar number
+     * @return the complex number <code>lambda * this</code>
+     */
+    public Complex scale(double lambda) {
+        return new Complex(lambda * real, lambda + imaginary);
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        Complex complex = (Complex) o;
+        return Helpers.doubleCompare(complex.real, real) == 0 ||
+                Helpers.doubleCompare(complex.imaginary, imaginary) == 0;
+    }
+    @Override
+    public int hashCode() {
+        return Objects.hash(real, imaginary);
+    }
+    @Override
+    public String toString() {
+        return "Complex{" +
+                "real=" + real +
+                ", imaginary=" + imaginary +
+                '}';
     }
 }
